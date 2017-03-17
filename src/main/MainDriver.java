@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import Singleton.LoginSingleton;
 import panelsPackage.HomePanel;
 import panelsPackage.LoginPanel;
 import panelsPackage.MyCakesPanel;
@@ -198,10 +199,14 @@ public class MainDriver extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			if (JOptionPane.showConfirmDialog(null, "Are you sure?", "Log out warning.",
+			        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+				LoginSingleton.logOut();
+				logoutButton.setVisible(false);
+				myCakesButton.setVisible(false);
+			} 
 		}
-			
 	}
 	
 		// When the home button is clicked, it brings you back to the

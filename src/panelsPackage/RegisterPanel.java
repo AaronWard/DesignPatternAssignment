@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import javax.swing.*;
 
+import Singleton.LoginSingleton;
 import main.MainDriver;
 import main.PanelFactory;
 import main.RandomNumberGenerator;
@@ -103,59 +104,66 @@ public class RegisterPanel extends PanelFactory{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Log in attempted");
-				String userID = new RandomNumberGenerator().generator();
-				System.out.println(userID);
-								
-				//Check for empty fields
-				if(nameField.getText().equals("") || passwordField.getPassword().length == 0 || passwordField2.getPassword().length ==0){
-					JOptionPane.showMessageDialog(null,"Must enter all fields", "Registration Failure", JOptionPane.ERROR_MESSAGE);		
-				}
-				//check for matching passwords
-				else if(!Arrays.equals(passwordField.getPassword(), passwordField2.getPassword())){
-					JOptionPane.showMessageDialog(null, "Passwords do not match.", "Woops", JOptionPane.ERROR_MESSAGE);
-					
-						//set the text to null if this error occurs 
-						passwordField.setText(null);
-						passwordField2.setText(null);
+				
+				if(LoginSingleton.getId() != null){
+					JOptionPane.showMessageDialog(null,"You must be logged out to register a user", "Registration Failure", JOptionPane.ERROR_MESSAGE);		
 				}
 				else{
-					
-					String name = nameField.getText(); 
-					String userPassword = String.valueOf(passwordField.getPassword());
-					
-					String url ="jdbc:mysql://localhost:3306/users?autoReconnect=true&useSSL=false";
-					String user = "root";
-					String password = "root";
-					
-					try
-					{
-						//1 - get a connection to the driver
-						Connection dbConnection = DriverManager.getConnection(url, user, password);
-						//2 - create a statement
-						Statement myStatement = dbConnection.createStatement();
-						
-						
-						//Update database
-						String sqlStatement = "INSERT INTO user"
-								+ "(id, name, password)"
-								+ "VALUES ('" + userID + "', '" + name +"','"+ userPassword + "')";
-						
-						myStatement.executeUpdate(sqlStatement);
+					System.out.println("Log in attempted");
+					String userID = new RandomNumberGenerator().generator();
+					System.out.println(userID);
+									
+					//Check for empty fields
+					if(nameField.getText().equals("") || passwordField.getPassword().length == 0 || passwordField2.getPassword().length ==0){
+						JOptionPane.showMessageDialog(null,"Must enter all fields", "Registration Failure", JOptionPane.ERROR_MESSAGE);		
 					}
-					catch (Exception e1)
-					{
-						e1.printStackTrace();
+					//check for matching passwords
+					else if(!Arrays.equals(passwordField.getPassword(), passwordField2.getPassword())){
+						JOptionPane.showMessageDialog(null, "Passwords do not match.", "Woops", JOptionPane.ERROR_MESSAGE);
+						
+							//set the text to null if this error occurs 
+							passwordField.setText(null);
+							passwordField2.setText(null);
 					}
-					
-					//When the user successfully registers and the DB has been updated
-					JOptionPane.showMessageDialog(null,"Your new login ID is " + userID, "Registration successfull", JOptionPane.ERROR_MESSAGE);	
-					
-					MainDriver.centrePanel.setVisible(false);
-					MainDriver.panel = new HomePanel();
-					MainDriver.centrePanel = MainDriver.panel.getPanel();
-					MainDriver.mainPanel.add(MainDriver.centrePanel, BorderLayout.CENTER);
+					else{
+						
+						String name = nameField.getText(); 
+						String userPassword = String.valueOf(passwordField.getPassword());
+						
+						String url ="jdbc:mysql://localhost:3306/users?autoReconnect=true&useSSL=false";
+						String user = "root";
+						String password = "root";
+						
+						try
+						{
+							//1 - get a connection to the driver
+							Connection dbConnection = DriverManager.getConnection(url, user, password);
+							//2 - create a statement
+							Statement myStatement = dbConnection.createStatement();
+							
+							
+							//Update database
+							String sqlStatement = "INSERT INTO user"
+									+ "(id, name, password)"
+									+ "VALUES ('" + userID + "', '" + name +"','"+ userPassword + "')";
+							
+							myStatement.executeUpdate(sqlStatement);
+						}
+						catch (Exception e1)
+						{
+							e1.printStackTrace();
+						}
+						
+						//When the user successfully registers and the DB has been updated
+						JOptionPane.showMessageDialog(null,"Your new login ID is " + userID, "Registration successfull", JOptionPane.ERROR_MESSAGE);	
+						
+						MainDriver.centrePanel.setVisible(false);
+						MainDriver.panel = new HomePanel();
+						MainDriver.centrePanel = MainDriver.panel.getPanel();
+						MainDriver.mainPanel.add(MainDriver.centrePanel, BorderLayout.CENTER);
+					}
 				}
+				
 			}
 	}
 }

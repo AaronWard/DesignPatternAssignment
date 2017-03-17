@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import javax.swing.*;
+
+import Singleton.LoginSingleton;
 import main.MainDriver;
 import main.PanelFactory;
 
@@ -95,10 +97,17 @@ public class LoginPanel extends PanelFactory {
 
 		return outterPanel;
 	}
+	
+	/**
+	 * If the user clicked the registration button
+	 * @author aaron
+	 *
+	 */
 	public class RegButtonListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//the main panel is set to the Registration panel
 			MainDriver.centrePanel.setVisible(false);
 			MainDriver.panel = new RegisterPanel();
 			MainDriver.centrePanel = MainDriver.panel.getPanel();
@@ -110,49 +119,88 @@ public class LoginPanel extends PanelFactory {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Log in attempted");
-			String userID;
-			
-			
-			/** CREATE DATABASE CONNECTION **/
-			String url ="jdbc:mysql://localhost:3306/users?autoReconnect=true&useSSL=false";
-			String user = "root";
-			String password = "root";
-			try
-			{
-				userID = idField.getText();
-				String userPassword = String.valueOf(passwordField.getPassword());
-			    String user1="";
-			    String pass1="";
-			    
-				Connection dbConnection = DriverManager.getConnection(url, user, password);	
-				//Select if the users ID and Password match that of one from the DB
-				PreparedStatement stmt = dbConnection.prepareStatement("SELECT * FROM user where id='"+
-													userID+"' && password='"+userPassword+"'");
-		        ResultSet res = stmt.executeQuery();
-
-				while (res.next()) 
-	            {
-					//variables are set to compare with the users input
-	                user1 = res.getString("id");
-	                pass1 = res.getString("password");
-	            }
-	            
-	            	//If the users ID and password match
-	            if (userID.equals(user1) && userPassword.equals(pass1))
-	            {
-	            	System.out.println("Successful login");
-	            }
-	            else{
-	            	System.out.println("NOPE");
-	            }
+						
+			/**
+			 * Checks the sington to check if the user is already signed in.
+			 * if true: then the user is prompted with an error message.
+			 */
+			if(LoginSingleton.getId() != null){
+				System.out.println("You are already logged in mate");
+				JOptionPane.showMessageDialog(null," You are already logged in as " + LoginSingleton.getId() +"\nSign out to log in as"
+				+" another user.", "", JOptionPane.ERROR_MESSAGE);	
 			}
-			catch(SQLException e1){
-				e1.printStackTrace();
+			else{
+					/** Check if fields are empty **/
+					if(idField.getText()== "" || passwordField.getPassword().length == 0 ){
+						JOptionPane.showMessageDialog(null,"Must enter all fields.", "Login Failure", JOptionPane.ERROR_MESSAGE);	
+					}
+					else{
+						System.out.println("Log in attempted");
+						String userID;
+						
+						
+						/** Database connection variables**/
+						String url ="jdbc:mysql://localhost:3306/users?autoReconnect=true&useSSL=false";
+						String user = "root";
+						String password = "root";
+						try
+						{
+							userID = idField.getText();
+							String userPassword = String.valueOf(passwordField.getPassword());
+						    String user1="";
+						    String pass1="";
+						    String userName = "";
+						    
+						    
+						    //Create a connection.
+							Connection dbConnection = DriverManager.getConnection(url, user, password);	
+							//Select if the users ID and Password match that of one from the DB
+							PreparedStatement stmt = dbConnection.prepareStatement("SELECT * FROM user where id='"+
+																userID+"' && password='"+userPassword+"'");
+					        ResultSet res = stmt.executeQuery();
+					        
+					        //Loop through the result set
+							while (res.next()) 
+				            {
+								//variables are set to compare with the users input
+				                user1 = res.getString("id");
+				                pass1 = res.getString("password");
+				                userName = res.getString("name");
+				            }
+				            
+				            	//If the users ID and password match IE. Login Successful
+				            if (userID.equals(user1) && userPassword.equals(pass1)){
+				            	
+				            	//prompt with success message
+								JOptionPane.showMessageDialog(null,"Login Successful.", "Welcome " + userName, JOptionPane.INFORMATION_MESSAGE);	
+				    			MainDriver.logoutButton.setVisible(true);
+				    			MainDriver.myCakesButton.setVisible(true);	
+				    			
+				    			//Set the instance of user
+				    			 LoginSingleton.getLoginInstance(userID);
+				    		    			
+				    			 //Bring user back to the home page
+								MainDriver.centrePanel.setVisible(false);
+								MainDriver.panel = new HomePanel();
+								MainDriver.centrePanel = MainDriver.panel.getPanel();
+								MainDriver.mainPanel.add(MainDriver.centrePanel, BorderLayout.CENTER);
+				            }
+				            /**
+				             * if the users name or password do not match that of any in the DB
+				             * then they are prompted with an error message and the fields
+				             * are cleared.
+				             */
+				            else{
+									JOptionPane.showMessageDialog(null,"Credentials not valid for login. Try again.", "Login Failure", JOptionPane.ERROR_MESSAGE);	
+									idField.setText("");
+									passwordField.setText("");
+				            }
+						}
+						catch(SQLException e1){
+							e1.printStackTrace();
+					}
+				}
 			}
-			MainDriver.loginButton.setVisible(false);
-			MainDriver.logoutButton.setVisible(true);
-			MainDriver.myCakesButton.setVisible(true);
 		}
 	}
 }
