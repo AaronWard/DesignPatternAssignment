@@ -8,12 +8,10 @@ import java.util.Arrays;
 
 import javax.swing.*;
 
-import Singleton.LoginSingleton;
 import main.MainDriver;
 import main.PanelFactory;
 import main.RandomNumberGenerator;
-import panelsPackage.LoginPanel.RegButtonListener;
-import panelsPackage.LoginPanel.SubmitListener;
+import singleton.LoginSingleton;
 
 public class RegisterPanel extends PanelFactory{
 	

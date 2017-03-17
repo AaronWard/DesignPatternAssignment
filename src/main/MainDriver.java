@@ -7,10 +7,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
-import Singleton.LoginSingleton;
-import panelsPackage.HomePanel;
-import panelsPackage.LoginPanel;
-import panelsPackage.MyCakesPanel;
+import panelsPackage.*;
+import singleton.LoginSingleton;
 
 
 @SuppressWarnings("serial")
@@ -25,7 +23,6 @@ public class MainDriver extends JFrame {
 	public JPanel buttonPanel;
 	public static JPanel centrePanel = new JPanel();
 	public static PanelFactory panel, northFactoryPanel;
-
 	
 	public static JButton loginButton, logoutButton;
 	public static JButton myCakesButton;
@@ -37,13 +34,18 @@ public class MainDriver extends JFrame {
 		new MainDriver();
 	}
 	
+	/**
+	 * Constructor to set GUI
+	 */
 	public MainDriver(){
-		super.setTitle("Cake Shop");
+		super.setTitle("Cake Shop Cafe");
 		add(getMainPanel());
 		setSizes();
 	}
 	
-	
+	/**
+	 * Sets the sizes and basic JFrame setting
+	 */
 	private void setSizes() {
 		setSize(1200, 800);
         setVisible(true);
@@ -81,9 +83,10 @@ public class MainDriver extends JFrame {
 		mainPanel.add(centrePanel, BorderLayout.CENTER);
 	}
 	
-	
-	
-	
+	/**
+	 * Create the Banner panel for the GUI
+	 * @return
+	 */
 	public JPanel getNorthPanel(){
 		
 		northPanel = new JPanel(new BorderLayout());
@@ -139,7 +142,7 @@ public class MainDriver extends JFrame {
 	}
 
 	/**
-	 * bar to provide buttons to nagivate between sections within
+	 * bar to provide buttons to navigate between sections within
 	 * the program
 	 * @return JPanel
 	 */
@@ -149,32 +152,27 @@ public class MainDriver extends JFrame {
 		navBarPanel.setLayout(new FlowLayout());
 		
 		JButton homeButton = new JButton("Home");
-		JButton recipesButton = new JButton("Recipes");
-		JButton cakesButton = new JButton("Cakes");
+		JButton makeACakeButton = new JButton("Make a cake");
 		myCakesButton = new JButton("My Cakes");
 		
 		homeButton	.setPreferredSize(new Dimension(150, 30));
-		recipesButton.setPreferredSize(new Dimension(150, 30));
-		cakesButton.setPreferredSize(new Dimension(150, 30));
+		makeACakeButton.setPreferredSize(new Dimension(150, 30));
 		myCakesButton.setPreferredSize(new Dimension(150, 30));
 		myCakesButton.setVisible(false);
 		
 		
 		homeButton.setBackground(Color.WHITE);
-		recipesButton.setBackground(Color.WHITE);
-		cakesButton.setBackground(Color.WHITE);
+		makeACakeButton.setBackground(Color.WHITE);
 		myCakesButton.setBackground(Color.WHITE);
 
 		
 		homeButton.addActionListener(new HomeListener());
-		recipesButton.addActionListener(new RecipesListener());
-		cakesButton.addActionListener(new CakesListener());
+		makeACakeButton.addActionListener(new MakeACakeListener());
 		myCakesButton.addActionListener(new MyCakesListener());
 		
 	
 		navBarPanel.add(homeButton);
-		navBarPanel.add(recipesButton);
-		navBarPanel.add(cakesButton);
+		navBarPanel.add(makeACakeButton);
 		navBarPanel.add(myCakesButton);
 
 		navBarPanel.setPreferredSize(new Dimension(1200, 30));
@@ -201,13 +199,13 @@ public class MainDriver extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (JOptionPane.showConfirmDialog(null, "Are you sure?", "Log out warning.",
 			        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-				LoginSingleton.logOut();
-				logoutButton.setVisible(false);
-				myCakesButton.setVisible(false);
-			} 
+	
+					LoginSingleton.logOut();
+					logoutButton.setVisible(false);
+					myCakesButton.setVisible(false);
+				} 
+			}
 		}
-	}
 	
 		// When the home button is clicked, it brings you back to the
 		// home page
@@ -221,19 +219,14 @@ public class MainDriver extends JFrame {
 				}
 		}
 		
-		public class RecipesListener implements ActionListener{
+		public class MakeACakeListener implements ActionListener{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub	
-			}
-		}
-		
-		public class CakesListener implements ActionListener{
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub	
+				centrePanel.setVisible(false);
+				panel = new MakeACakePanel();
+				centrePanel = panel.getPanel();
+				mainPanel.add(centrePanel, BorderLayout.CENTER);
 			}
 		}
 		
@@ -241,7 +234,10 @@ public class MainDriver extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				centrePanel.setVisible(false);
+				panel = new MyCakesPanel();
+				centrePanel = panel.getPanel();
+				mainPanel.add(centrePanel, BorderLayout.CENTER);
 			}
 		}
 }

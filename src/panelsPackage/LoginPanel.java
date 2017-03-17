@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 import javax.swing.*;
 
-import Singleton.LoginSingleton;
 import main.MainDriver;
 import main.PanelFactory;
+import singleton.LoginSingleton;
 
 /**
  * 
@@ -126,7 +126,7 @@ public class LoginPanel extends PanelFactory {
 			 */
 			if(LoginSingleton.getId() != null){
 				System.out.println("You are already logged in mate");
-				JOptionPane.showMessageDialog(null," You are already logged in as " + LoginSingleton.getId() +"\nSign out to log in as"
+				JOptionPane.showMessageDialog(null," You are already logged in as " + LoginSingleton.getName() +" with the ID: " + LoginSingleton.getId() + "\nSign out to log in as"
 				+" another user.", "", JOptionPane.ERROR_MESSAGE);	
 			}
 			else{
@@ -177,7 +177,7 @@ public class LoginPanel extends PanelFactory {
 				    			MainDriver.myCakesButton.setVisible(true);	
 				    			
 				    			//Set the instance of user
-				    			 LoginSingleton.getLoginInstance(userID);
+				    			 LoginSingleton.getLoginInstance(userID, userName);
 				    		    			
 				    			 //Bring user back to the home page
 								MainDriver.centrePanel.setVisible(false);
