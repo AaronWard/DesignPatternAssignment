@@ -76,8 +76,6 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 		innerRightPanel.setPreferredSize(new Dimension(500, 500));
 		
 		innerLeftPanel.setBorder(BorderFactory.createEmptyBorder (0,0,0, 0));
-//		innerRightPanel.setBorder(BorderFactory.createEmptyBorder (50, 50, 30, 10));
-
 		
 		/** Left Panel **/
 		JLabel titleLabel = new JLabel("Choose your igredients and type");
@@ -232,10 +230,28 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 			
 			if(LoginSingleton.getId() == null){
 				JOptionPane.showMessageDialog(null,"You need to be logged in to create a custom cake\nLogin and try again.", "Login Needed", JOptionPane.ERROR_MESSAGE);	
-
+				}
+			else{
+				if(type == null || size == null || topping == null || shape == null){
+					JOptionPane.showMessageDialog(null,"You need to select all entries to create a cake", "Woops", JOptionPane.ERROR_MESSAGE);	
+				}
+				else{
+					if (JOptionPane.showConfirmDialog(null, "You want a " + size.toLowerCase() + " " + shape.toLowerCase() + " " +
+							type.toLowerCase() + " with " +topping.toLowerCase() + " toppings.\n Is this correct?", "Confirm cake",
+					        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+							addToDatabase();
+					} 
+				}
 			}
 		}
 	}
+	
+	/**
+	 * method used to add cake to the database
+	 */
+	private void addToDatabase(){
+		
+	}	
 	
 	public class TypeListener implements ActionListener{
 
@@ -252,6 +268,7 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 			URL url;
 			if(cb.getSelectedItem() == "Chocolate"){
 			       url = this.getClass().getResource("../choc.jpg");
+			       type = (String) cb.getSelectedItem();			       
 			}else if(cb.getSelectedItem() == "Creampie"){
 			       url = this.getClass().getResource("../cream.jpg");
 			       type = (String) cb.getSelectedItem();			       
@@ -285,8 +302,8 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 			System.out.println(cb.getSelectedItem());
 			pickedShapeLabel.setText("Shape: " + cb.getSelectedItem());
 
+			shape =  (String) cb.getSelectedItem();			       
 		}
-		
 	}
 	public class ToppingsListener implements ActionListener{
 
@@ -297,9 +314,8 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 			System.out.println(cb.getSelectedItem());
 			pickedToppingsLabel.setText("Toppings: " + cb.getSelectedItem());
 
-			
+		    topping = (String) cb.getSelectedItem();			       
 		}
-		
 	}
 	public class SizeListener implements ActionListener{
 
@@ -310,7 +326,7 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 			System.out.println(cb.getSelectedItem());
 			pickedSizeLabel.setText("Size: " + cb.getSelectedItem());
 
-			
+		       size = (String) cb.getSelectedItem();			       
 		}
 	}
 }
