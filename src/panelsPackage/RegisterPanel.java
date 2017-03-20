@@ -9,8 +9,8 @@ import java.util.Arrays;
 import javax.swing.*;
 
 import main.MainDriver;
-import main.PanelFactory;
 import main.RandomNumberGenerator;
+import panelFactory.PanelFactory;
 import singleton.LoginSingleton;
 
 public class RegisterPanel extends PanelFactory{
@@ -24,6 +24,10 @@ public class RegisterPanel extends PanelFactory{
 		
 		JTextField nameField;
 		JPasswordField passwordField, passwordField2;
+		JComboBox<String> countyCombo;
+		String[] countyList = {"Dublin", "Cork", "Galway"};
+		
+		String countyPick;
 		
 		@Override
 		public JPanel getPanel() {
@@ -36,10 +40,29 @@ public class RegisterPanel extends PanelFactory{
 			nameField = new JTextField(20);
 			passwordField = new JPasswordField(20);
 			passwordField2 = new JPasswordField(20);
+			countyCombo = new JComboBox<String>(countyList);
+			countyCombo.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JComboBox<String> cb = (JComboBox<String>) e.getSource();
+					
+					if(cb.getSelectedItem() == "Dublin"){
+						countyPick = "Dublin";
+					}else if(cb.getSelectedItem() == "Cork"){
+						countyPick = "Cork";
+					}
+					else{
+						countyPick = "Galway";
+					}
+				}
+			});
 
 			JLabel nameLabel = new JLabel("Name: ");
 			JLabel passLabel = new JLabel("Choose a password: ");
-			JLabel passLabel2 = new JLabel("Re-enter Password:");
+			JLabel passLabel2 = new JLabel("Re-enter Password: ");
+			JLabel countyLabel = new JLabel("County: ");
+			
 			
 			nameLabel.setFont(new Font("Century Gothic", Font.PLAIN, 22));
 			nameLabel.setForeground(Color.WHITE);
@@ -47,9 +70,13 @@ public class RegisterPanel extends PanelFactory{
 			passLabel.setForeground(Color.WHITE);
 			passLabel2.setFont(new Font("Century Gothic", Font.PLAIN, 22));
 			passLabel2.setForeground(Color.WHITE);
+			countyLabel.setFont(new Font("Century Gothic", Font.PLAIN, 22));
+			countyLabel.setForeground(Color.WHITE);
+
+
 			
 			innerPanel = new JPanel();
-			innerPanel.setLayout(new GridLayout(3, 2, 10, 30));
+			innerPanel.setLayout(new GridLayout(4, 2, 10, 30));
 			innerPanel.setBackground(new Color(51, 51, 51));
 					
 			/** Add components to JPanel **/
@@ -59,7 +86,9 @@ public class RegisterPanel extends PanelFactory{
 			innerPanel.add(passwordField);
 			innerPanel.add(passLabel2);
 			innerPanel.add(passwordField2);
-			
+			innerPanel.add(countyLabel);
+			innerPanel.add(countyCombo);
+
 			
 			/**/
 			formPanel = new JPanel();
@@ -82,7 +111,7 @@ public class RegisterPanel extends PanelFactory{
 			formPanel.add(buttonPanel);
 			
 			mainLoginPanel.add(formPanel);
-			mainLoginPanel.setBorder(BorderFactory.createEmptyBorder(70, 200, 200,200));
+			mainLoginPanel.setBorder(BorderFactory.createEmptyBorder(5, 200, 200,200));
 			mainLoginPanel.setBackground(new Color(51,51,51));
 			
 			outterPanel = new JPanel();
@@ -142,8 +171,8 @@ public class RegisterPanel extends PanelFactory{
 							
 							//Update database
 							String sqlStatement = "INSERT INTO user"
-									+ "(id, name, password)"
-									+ "VALUES ('" + userID + "', '" + name +"','"+ userPassword + "')";
+									+ "(id, name, password, county)"
+									+ "VALUES ('" + userID + "', '" + name +"','"+ userPassword +"','" + countyPick+ "')";
 							
 							myStatement.executeUpdate(sqlStatement);
 						}

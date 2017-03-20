@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import main.MainDriver;
-import main.PanelFactory;
+import panelFactory.PanelFactory;
 
 public class HomePanel extends PanelFactory {
 
@@ -85,7 +85,6 @@ public class HomePanel extends PanelFactory {
             	daylabels[i]=new JLabel(weekDaysArray[i]);
             	daylabels[i].setFont(new Font("", Font.BOLD, 14));
             	daylabels[i].setForeground(Color.white);
-
                 timesPanel.add(daylabels[i]);
                 
                 for (int x = 0; x < 6; x++){

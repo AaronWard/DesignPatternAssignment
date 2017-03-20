@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -18,8 +20,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import java.sql.*;
+
 import main.MainDriver;
-import main.PanelFactory;
+import panelFactory.PanelFactory;
 import singleton.LoginSingleton;
 
 public class MakeACakePanel extends PanelFactory implements ActionListener{
@@ -27,7 +31,6 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 	JPanel mainCakeMakerPanel;
 	JPanel leftPanel, rightPanel;
 	JPanel innerLeftPanel, innerRightPanel;
-//	JPanel dropDownPanel;
 	JPanel picturePanel, ingredientsPanel;
 	
 	JComboBox<String> shapeCombo;
@@ -56,7 +59,7 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 		String[] typeArray ={"Chocolate", "Creampie", "Butter Cake", "Sponge Cake"};
 		String [] shapeArray = {"Square", "Circular"};
 		String [] toppingsArray = {"Sprinkles", "Crushed Cookies", "Chocolate Chips", "Vanilla Cream"};
-		String [] sizeArray = {"6''", "8''", "10''", "12'"};
+		String [] sizeArray = {"6''", "8''", "10''", "12''"};
 		
 		/** GUI **/
 		mainCakeMakerPanel = new JPanel();
@@ -151,7 +154,6 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 		innerLeftPanel.add(dropDownPanel, BorderLayout.CENTER);
 		
 		/** Right Panel **/
-		
 		picturePanel = new JPanel();		
 		imageLabel = new JLabel();
 		picturePanel.add(imageLabel);
@@ -199,8 +201,6 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 		ingredientsPanel.setBackground(MainDriver.northBackground);
 		ingredientsPanel.setPreferredSize(new Dimension(250, 250));
 
-		
-		
 		leftPanel.add(innerLeftPanel);
 		rightPanel.add(picturePanel);
 		rightPanel.add(ingredientsPanel);
@@ -251,8 +251,32 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 	 */
 	private void addToDatabase(){
 		
+		String url ="jdbc:mysql://localhost:3306/users?autoReconnect=true&useSSL=false";
+		String user = "root";
+		String password = "root";
+		
+		try{
+			//1 - get a connection to the driver
+			Connection dbConnection = DriverManager.getConnection(url, user, password);
+			//2 - create a statement
+			Statement myStatement = dbConnection.createStatement();
+			
+			//Update database
+			String sqlStatement =  "INSERT INTO cake"
+					+ "(id, type, size, toppings, shape)"
+					+ "VALUES ('" + LoginSingleton.getId() + "','" + type +"','"+ size + "','" + topping + "','" + shape + "')";
+			myStatement.executeUpdate(sqlStatement);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}	
 	
+	/**
+	 * 
+	 * @author aaron
+	 *
+	 */
 	public class TypeListener implements ActionListener{
 
 		@Override
@@ -321,12 +345,13 @@ public class MakeACakePanel extends PanelFactory implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			@SuppressWarnings("unchecked")
 			JComboBox<String> cb = (JComboBox<String>) e.getSource();
 			System.out.println(cb.getSelectedItem());
 			pickedSizeLabel.setText("Size: " + cb.getSelectedItem());
 
-		       size = (String) cb.getSelectedItem();			       
+	       size = (String) cb.getSelectedItem();			       
 		}
 	}
 }

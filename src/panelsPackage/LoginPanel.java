@@ -9,7 +9,7 @@ import java.sql.*;
 import javax.swing.*;
 
 import main.MainDriver;
-import main.PanelFactory;
+import panelFactory.PanelFactory;
 import singleton.LoginSingleton;
 
 /**

@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import panelFactory.PanelFactory;
 import panelsPackage.*;
 import singleton.LoginSingleton;
 
@@ -153,26 +154,31 @@ public class MainDriver extends JFrame {
 		
 		JButton homeButton = new JButton("Home");
 		JButton makeACakeButton = new JButton("Make a cake");
+		JButton viewUsersButton = new JButton("View users");
 		myCakesButton = new JButton("My Cakes");
 		
 		homeButton	.setPreferredSize(new Dimension(150, 30));
 		makeACakeButton.setPreferredSize(new Dimension(150, 30));
+		viewUsersButton.setPreferredSize(new Dimension(150, 30));
 		myCakesButton.setPreferredSize(new Dimension(150, 30));
 		myCakesButton.setVisible(false);
 		
 		
 		homeButton.setBackground(Color.WHITE);
 		makeACakeButton.setBackground(Color.WHITE);
+		viewUsersButton.setBackground(Color.WHITE);
 		myCakesButton.setBackground(Color.WHITE);
 
 		
 		homeButton.addActionListener(new HomeListener());
 		makeACakeButton.addActionListener(new MakeACakeListener());
+		viewUsersButton.addActionListener(new ViewUsersListener());
 		myCakesButton.addActionListener(new MyCakesListener());
 		
 	
 		navBarPanel.add(homeButton);
 		navBarPanel.add(makeACakeButton);
+		navBarPanel.add(viewUsersButton);
 		navBarPanel.add(myCakesButton);
 
 		navBarPanel.setPreferredSize(new Dimension(1200, 30));
@@ -225,6 +231,17 @@ public class MainDriver extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				centrePanel.setVisible(false);
 				panel = new MakeACakePanel();
+				centrePanel = panel.getPanel();
+				mainPanel.add(centrePanel, BorderLayout.CENTER);
+			}
+		}
+		
+		public class ViewUsersListener implements ActionListener{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centrePanel.setVisible(false);
+				panel = new DisplayUsersPanel();
 				centrePanel = panel.getPanel();
 				mainPanel.add(centrePanel, BorderLayout.CENTER);
 			}
