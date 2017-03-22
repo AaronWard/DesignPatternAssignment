@@ -4,19 +4,13 @@ public class User extends UserComponent{
 
 		String userName;
 		String countyName;
-		String favouriteCake;
+		String userID;
 		
-		public User(String userName, String countyName){
+		public User(String userName, String countyName, String userID){
 			this.userName = userName;
 			this.countyName = countyName;
+			this.userID = userID;
 		}
-		
-//		
-//		public User(String userName, String countyName, String favouriteCake){
-//			this.userName = userName;
-//			this.countyName = countyName;
-//			this.favouriteCake = favouriteCake;
-//		}
 	
 		public String getUserName(){
 			return userName;
@@ -26,8 +20,8 @@ public class User extends UserComponent{
 			return countyName;
 		}
 		
-		public String getFavouriteCake() {
-			return favouriteCake;
+		public String getUserID(){
+			return userID;
 		}
 		
 		public void displayUserInfo(){

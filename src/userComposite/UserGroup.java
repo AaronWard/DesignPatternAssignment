@@ -9,11 +9,14 @@ import java.util.*;
  *
  */
 public class UserGroup extends UserComponent {
-
-	ArrayList<UserComponent> userComponents = new ArrayList<UserComponent>();
 	
+	ArrayList userComponents = new ArrayList();	
 	String groupName;
 	
+	/**
+	 * set the group name (dublin/cork/galway)
+	 * @param groupName
+	 */
 	public UserGroup(String groupName){
 		this.groupName = groupName;
 	}
@@ -27,20 +30,22 @@ public class UserGroup extends UserComponent {
 	}
 	
 	public UserComponent getComponent(int index){
-		return userComponents.get(index);
+		return(UserComponent) userComponents.get(index);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public ArrayList<UserComponent> getAllComponent(){		
-		return userComponents;
+		return (ArrayList<UserComponent>) userComponents;
 	}
 	
 	/**
 	 * Iterate through the array list of users
 	 */
 	public void displayUserInfo(){
-		System.out.println(getGroupName());
+		System.out.println(getGroupName() + "\n");
 		
-		Iterator<UserComponent> userIterator = userComponents.iterator();
+		//Loop through the users
+		Iterator userIterator = userComponents.iterator();
 		while (userIterator.hasNext()) {
 				UserComponent userInfo = (UserComponent) userIterator.next();
 				userInfo.displayUserInfo();

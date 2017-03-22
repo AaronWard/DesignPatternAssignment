@@ -5,17 +5,15 @@ import java.util.ArrayList;
 public class UserListMaker {
 
 	UserComponent userList;
+	//Store list of users in an ArrayList
 	ArrayList<UserComponent> arr;
 	
 	public UserListMaker(UserComponent newUserList){
 			userList = newUserList;
 	}
-	public void  getUserList(){
-//		userList.displayUserInfo();
-		arr = userList.getAllComponent();
-	}	
-	
+	//get the list of users and return
 	public ArrayList<UserComponent> getAllUsers(){
+		arr = userList.getAllComponent();
 		return arr;
 	}
 }

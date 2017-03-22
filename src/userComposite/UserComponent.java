@@ -8,20 +8,23 @@ import java.util.ArrayList;
  *
  */
 public abstract class UserComponent {
-
 	public void add(UserComponent newUserComponent){
 		throw new UnsupportedOperationException();
 	}
 	
-	public String getName(){
-		throw new UnsupportedOperationException();
-	}
-		
-	public String getCounty(){
+	public UserComponent getComponent(int index){
 		throw new UnsupportedOperationException();
 	}
 	
-	public String getFavouriteCake(){
+	public String getUserName(){
+		throw new UnsupportedOperationException();
+	}
+		
+	public String getCountyName(){
+		throw new UnsupportedOperationException();
+	}
+	
+	public String getUserID(){
 		throw new UnsupportedOperationException();
 	}
 	
